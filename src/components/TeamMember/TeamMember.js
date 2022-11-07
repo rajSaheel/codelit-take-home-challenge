@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import './TeamMember.css';
 import CodelitEmptyAvatar from '../../assets/codelit_empty_avatar.svg';
 
+
 export class NewMemberForm extends React.PureComponent{
   static propTypes={
     handleForm:PropTypes.func,
@@ -23,6 +24,16 @@ export class NewMemberForm extends React.PureComponent{
 
   handleChange=e=> this.setState({[e.target.name]:e.target.value})
 
+  fileUpload=async(e)=>{
+    const reader=new FileReader();
+    reader.readAsDataURL(e.target.files[0]);
+    reader.onload=()=>{
+      this.setState({
+        photo:reader.result
+      });
+    }
+  }
+
   submitForm=()=>{
     this.props.handleSubmit(this.state);
   }
@@ -32,7 +43,7 @@ export class NewMemberForm extends React.PureComponent{
       <div className='form-container'>
         <span id="form-heading">New Member Form</span>
         <span id="line-break"></span>
-        <form method='post' name="new-member-form">
+        <form name="new-member-form">
           <div className='form-field'>
           <label htmlFor="firsName">First Name</label>
           <input name="firstName" type={"text"} onChange={this.handleChange} required></input>
@@ -55,7 +66,7 @@ export class NewMemberForm extends React.PureComponent{
           </div>
           <div className='form-field'>
           <label htmlFor="photo">Photo</label>
-          <input name='photo' type={"file"}></input>
+          <input name='photo' type={"file"} onChange={this.fileUpload}></input>
           </div>
           <div className='form-button'>
           <input type={"button"} value="Submit" onClick={this.submitForm}></input>
